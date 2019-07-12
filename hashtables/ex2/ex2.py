@@ -19,5 +19,15 @@ def reconstruct_trip(tickets, length):
     """
     YOUR CODE HERE
     """
+    # Populate the hash table using for loop, source is key and dest is value
+    for ticket in tickets:
+        hash_table_insert(hashtable, ticket.source, ticket.destination)
+    # Declare an array
+    answer_array = []
+    # Place the first value in array
+    answer_array.append(hash_table_retrieve(hashtable, "NONE"))
 
-    return route
+    for count in range(1, length):
+        answer_array.insert(count, hash_table_retrieve(hashtable, answer_array[-1]))
+    # Return array
+    return answer_array
