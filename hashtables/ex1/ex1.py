@@ -7,34 +7,52 @@ from hashtables import (HashTable,
 
 
 def get_indices_of_item_weights(weights, length, limit):
+    
     ht = HashTable(16)
+    ht2 = HashTable(16)
 
     """
     YOUR CODE HERE
     """
-    # Put array elements into hash table, using for loop
+    if limit == None:
+        return None
+    # Declare count property
+    count = 0
+    # Put array elements into two hash tables, using for loop,
     for i in range(0, len(weights)):
-        ht.hash_table_insert(ht, weights[i], weights[i])
-    # Return the two elements that, when added up, result in the greatest number within the limit
+        hash_table_insert(ht, count, weights[i])
+        count += 1
     
-    # Declare largest_number property
-    largest_number = 0
-    # Declare current_number property
-    current_number = ht.storage[0]
-    # Declare an answer tuple property
-    answer = (0, 0)
-    # Go into a for loop with the weights array
-    for i in range(0,len(weights)):
-        # If current number plus array[index] number is greater than largest_number property, largest number is now equal to the two numbers' sum and the answer tuple is updated with the two numbers, the greatest first and the least last
-        if current_number + weights[i] > largest_number:
-            largest_number = current_number +weights[i]
-            if current_number > weights[i]:
-                answer = (current_number, weights[i])
-            else:
-                answer = (weights[i], current_number)
-    
-    # I am going to assume that, even though the test file has no duplicates in the int array, I should account for duplicates
+    # If the count is one, return None
+    if count == 1 or count == 0:
+        return None
 
+    # Declare answer property
+    answer = (1, 0)
+    # Declare two index properties
+    left_index = 0
+    right_index = 1
+    # While the sum of the two elements of answer do not equal the wait limit
+    while hash_table_retrieve(ht, answer[0]) + hash_table_retrieve(ht, answer[1]) != limit:
+        # answer equals (left index, right index)
+        if hash_table_retrieve(ht, left_index) != None and hash_table_retrieve(ht, right_index) != None:
+            
+            answer = (left_index, right_index)
+        # If the left index is at the last index already, then break out of the loop here to avoid index out of range errors
+        if left_index == count - 1:
+            break
+        # If the right index is at the last index, then the left index is increased by one and the right index is reset to 0 to start the loop again
+        if right_index >= count - 1:
+            left_index += 1
+            right_index = left_index + 1
+        right_index += 1
+    # If we are out of the loop but the answer values do not add up to the limit, set the answer to none
+    if hash_table_retrieve(ht, answer[0]) + hash_table_retrieve(ht, answer[1]) != limit:
+        return None
+    # Else if the second element of answer is greater than the first, swap element indexes
+    elif answer[1] > answer[0]:
+        answer = (answer[1], answer[0])
+    # Return answer
     return answer
 
 
